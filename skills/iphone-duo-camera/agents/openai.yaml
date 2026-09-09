@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Camera"
+  short_description: "Review capture behavior across display changes"
+  default_prompt: "Use $iphone-duo-camera to adapt this capture pipeline for iPhone Duo display transitions."

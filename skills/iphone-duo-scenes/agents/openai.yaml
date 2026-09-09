@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Scenes"
+  short_description: "Manage scenes, hinge input, and display content"
+  default_prompt: "Use $iphone-duo-scenes to review scene ownership and capability changes for this iPhone Duo feature."

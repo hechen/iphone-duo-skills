@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Testing"
+  short_description: "Verify transitions with reproducible QA evidence"
+  default_prompt: "Use $iphone-duo-testing to test this app’s iPhone Duo transitions and report remaining evidence gaps."

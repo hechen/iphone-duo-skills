@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Toolbars"
+  short_description: "Adapt vertical bars, custom items, and overflow"
+  default_prompt: "Use $iphone-duo-toolbars to review this screen’s toolbar actions and overflow for iPhone Duo."

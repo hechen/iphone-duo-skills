@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Layout"
+  short_description: "Adapt content around folds and reserved regions"
+  default_prompt: "Use $iphone-duo-layout to adapt this content layout while preserving navigation and state."

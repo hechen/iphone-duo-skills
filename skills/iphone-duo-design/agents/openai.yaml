@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Design"
+  short_description: "Review adaptive hierarchy and task continuity"
+  default_prompt: "Use $iphone-duo-design to review this flow for iPhone Duo hierarchy, reachability, and continuity."

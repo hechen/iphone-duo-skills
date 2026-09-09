@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Readiness"
+  short_description: "Audit app assumptions and plan Duo migration"
+  default_prompt: "Use $iphone-duo-readiness to audit this app and prioritize its iPhone Duo migration with SDK evidence."
