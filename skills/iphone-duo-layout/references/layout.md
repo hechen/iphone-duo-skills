@@ -1,5 +1,17 @@
 # Layout evidence and API lookup points
 
+## Written documentation — start here
+
+Checked 2026-09-11:
+
+- [Duo HIG: Dynamic layouts](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo#Dynamic-layouts): written guidance on reserved regions, split views, and arrangement views.
+- [NavigationSplitView](https://developer.apple.com/documentation/swiftui/navigationsplitview) / [UISplitViewController](https://developer.apple.com/documentation/uikit/uisplitviewcontroller): adaptive navigation APIs, distinct from content arrangements.
+- [safeAreaLayoutGuide](https://developer.apple.com/documentation/uikit/uiview/safearealayoutguide): the safe-area layout boundary for custom UIKit content.
+
+Standalone references for `ArrangementView`, `UIArrangementViewController`, `ReservedRegion`, and `UIViewReservedRegion` were not located during this check. Use the HIG for concepts and the session below for demonstrated API names; verify declarations in the actual SDK before coding. Do not treat a guessed documentation URL as evidence.
+
+## Supplementary session
+
 Source: [Strike a pose](https://developer.apple.com/videos/play/tech-talks/111463/), verified 2026-09-09. Names below are session references, not a compiled API recipe.
 
 - **2:26–5:12:** Displace related controls together when needed; continuously scrolling content should not be moved as a unit around the fold.

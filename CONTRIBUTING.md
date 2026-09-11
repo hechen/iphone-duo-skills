@@ -2,7 +2,7 @@
 
 Keep changes focused on decisions an agent would otherwise get wrong when adapting an app for iPhone Duo.
 
-- Cite a public Apple source and a section or timestamp for new platform claims. Identify your own engineering recommendations separately.
+- Prefer Apple's written API documentation for declarations and availability, and the HIG for design guidance. Use session timestamps for explanations or APIs whose written reference is not yet located. Cite the specific source for new claims and identify repository recommendations separately.
 - Check new declarations and availability against the SDK you actually used. Report its Xcode build, SDK version, deployment target, and validation result. Until verified, describe symbols as session references rather than compiled examples.
 - Preserve independently installable skills: local references must remain inside that skill folder. Avoid copying entire transcripts or proprietary examples.
 - Exercise a realistic request with the affected skill. Record the request, observed result, and limitations. Do not equate a packaging check with a behavioral evaluation.

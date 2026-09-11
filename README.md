@@ -4,7 +4,7 @@ Reusable AI coding skills for preparing SwiftUI and UIKit apps for iPhone Duo. E
 
 Built on the [Agent Skills open format](https://agentskills.io/specification). Use the same seven skills with **Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex, OpenCode, Windsurf, Cline, Roo Code, Continue, Antigravity, OpenClaw**, and other compatible agents. See [agent compatibility](COMPATIBILITY.md) for installation routes and verification scope.
 
-**Status: announcement-day edition, September 9, 2026.** Apple has published developer sessions; its [developer hub](https://developer.apple.com/iphone-duo/) currently lists Xcode 27.1 beta and the detailed preparation article as coming later this month. New API names below were verified against those session pages, **not compiled against the iOS 27.1 SDK**. Recheck availability and declarations before implementation.
+**Documentation checked September 11, 2026.** Apple's [Designing for iPhone Duo HIG](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo) and direct API references are available. The [developer hub](https://developer.apple.com/iphone-duo/) still lists Xcode 27.1 beta and the separate preparation article as coming later this month. Each skill starts with relevant written documentation and keeps sessions as supplementary evidence. New Duo APIs have **not been compiled against the iOS 27.1 SDK** here; references identify documentation gaps separately.
 
 This is an independent community resource. It is not affiliated with Apple and is separate from Apple's App Resizability skill discussed in the preparation session.
 
@@ -79,7 +79,7 @@ Use your agent's skill picker or invocation syntax if it offers one. If it canno
 
 ## Evidence and compatibility
 
-- [Sources](SOURCES.md) maps the skills to Apple's six announcement sessions.
+- [Sources](SOURCES.md) maps the skills to Apple's HIG, API documentation, guides, sample code, and supplementary sessions.
 - Every skill includes a local reference distinguishing session guidance from repository recommendations.
 - SDK availability is a separate question from runtime availability: `if #available` cannot make a symbol compile in an older SDK.
 - No private projects, credentials, Apple artwork, or copied session transcripts are included.

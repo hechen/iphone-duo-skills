@@ -1,5 +1,17 @@
 # Camera evidence
 
+## Written documentation — start here
+
+Checked 2026-09-11:
+
+- [AVCam: Building a camera app](https://developer.apple.com/documentation/avfoundation/avcam-building-a-camera-app): Apple's sample and explanation of a capture app's components.
+- [Setting up a capture session](https://developer.apple.com/documentation/avfoundation/setting-up-a-capture-session): inputs, outputs, and the session pipeline.
+- [AVCaptureDevice.RotationCoordinator](https://developer.apple.com/documentation/avfoundation/avcapturedevice/rotationcoordinator): the Swift API for capture and preview rotation angles. Its Objective-C name is `AVCaptureDeviceRotationCoordinator`; prefer the declaration for the language being implemented.
+
+These established capture APIs are documented. A standalone reference for the newly announced direction coordinator was not located during this check. Its Duo-specific behavior below remains session evidence until current documentation/SDK declarations can be verified.
+
+## Supplementary session
+
 Source: [Build a great camera experience](https://developer.apple.com/videos/play/tech-talks/111465/), verified 2026-09-09. Symbols are session references; exact declarations and availability are uncompiled here.
 
 - **0:58–1:53:** The virtual front camera switches between physical cameras and exposes their common capabilities. Explicit devices provide camera-specific features but require more management.

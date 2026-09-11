@@ -1,5 +1,15 @@
 # Transition matrix
 
+## Written documentation — start here
+
+Checked 2026-09-11:
+
+- [Running your app on simulated or physical devices](https://developer.apple.com/documentation/xcode/running-your-app-on-simulated-or-physical-devices): schemes, destinations, and physical-device verification.
+- [Configuring the environment of a simulated device](https://developer.apple.com/documentation/xcode/configuring-the-environment-of-a-simulated-device): appearance, accessibility, and simulator environment controls. Match these instructions to the installed Xcode version.
+- [Performing accessibility audits](https://developer.apple.com/documentation/accessibility/performing-accessibility-audits-for-your-app) and [Performing accessibility testing](https://developer.apple.com/documentation/accessibility/performing-accessibility-testing-for-your-app): automated inspection plus testing with accessibility settings and assistive technologies.
+
+## Repository test scenarios
+
 This matrix is a repository-authored QA proposal. Select rows relevant to the app; do not require camera or multi-scene work for unrelated apps.
 
 | Scenario | State to establish | Verify after transition |
