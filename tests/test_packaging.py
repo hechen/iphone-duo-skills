@@ -21,6 +21,22 @@ class PackagingTests(unittest.TestCase):
     def test_repository(self):
         self.assertEqual(validator.validate(ROOT), [])
 
+    def test_all_skills_validate_without_openai_metadata(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            installer.install(ROOT / "skills", root / "skills", [])
+            for metadata in (root / "skills").glob("*/agents/openai.yaml"):
+                metadata.unlink()
+            self.assertEqual(validator.validate(root), [])
+
+    def test_present_vendor_metadata_is_still_validated(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            installer.install(ROOT / "skills", root / "skills", ["iphone-duo-layout"])
+            metadata = root / "skills/iphone-duo-layout/agents/openai.yaml"
+            metadata.write_text("interface: []\n")
+            self.assertTrue(any("interface mapping" in e for e in validator.validate(root)))
+
     def test_install_preserves_contents_and_references(self):
         with tempfile.TemporaryDirectory() as directory:
             dest = Path(directory) / "skills"

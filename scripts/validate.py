@@ -31,11 +31,19 @@ def validate(root):
             name = meta.get("name", "")
             if (not isinstance(name, str) or name != skill.parent.name
                     or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name)
-                    or len(name) >= 64):
+                    or len(name) > 64):
                 errors.append(f"{relative}: invalid or mismatched name")
-            if not isinstance(meta.get("description"), str) or not meta["description"].strip():
-                errors.append(f"{relative}: missing description")
-            ui = yaml.safe_load((skill.parent / "agents/openai.yaml").read_text())
+            description = meta.get("description")
+            if not isinstance(description, str) or not description.strip() or len(description) > 1024:
+                errors.append(f"{relative}: description must be 1–1024 characters")
+            # Agent Skills need no vendor metadata. Validate Codex's extension only
+            # when present, so a standards-only package remains independently valid.
+            ui_path = skill.parent / "agents/openai.yaml"
+            if not ui_path.exists():
+                continue
+            ui = yaml.safe_load(ui_path.read_text())
+            if not isinstance(ui, dict) or not isinstance(ui.get("interface"), dict):
+                raise ValueError("OpenAI UI metadata must contain an interface mapping")
             interface = ui["interface"]
             if not interface.get("display_name"):
                 errors.append(f"{relative}: missing display name")
