@@ -41,7 +41,9 @@ class PackagingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             dest = Path(directory) / "skills"
             paths = installer.install(ROOT / "skills", dest, [])
-            self.assertEqual(len(paths), 7)
+            expected = {p.parent.name for p in (ROOT / "skills").glob("*/SKILL.md")}
+            self.assertEqual({p.name for p in paths}, expected)
+            self.assertIn(validator.ROUTER, expected)
             for target in paths:
                 source = ROOT / "skills" / target.name
                 for file in source.rglob("*"):
@@ -87,6 +89,48 @@ class PackagingTests(unittest.TestCase):
             errors = validator.validate(root)
             self.assertTrue(any("broken link" in e for e in errors))
             self.assertTrue(any("escapes package" in e for e in errors))
+
+    def test_entry_point_must_route_to_every_skill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            installer.install(ROOT / "skills", root / "skills", [])
+            router = root / "skills" / validator.ROUTER / "SKILL.md"
+            router.write_text(router.read_text().replace("`iphone-duo-camera`", "camera skill"))
+            errors = validator.validate(root)
+            self.assertTrue(any("does not route to iphone-duo-camera" in e for e in errors))
+
+    def test_subset_without_entry_point_still_validates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            installer.install(ROOT / "skills", root / "skills", ["iphone-duo-layout", "iphone-duo-camera"])
+            self.assertEqual(validator.validate(root), [])
+
+    def test_frontmatter_outside_specification_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            installer.install(ROOT / "skills", root / "skills", ["iphone-duo-layout"])
+            entry = root / "skills/iphone-duo-layout/SKILL.md"
+            text = entry.read_text()
+            cases = {
+                "argument-hint: '[screen]'\n": "outside the Agent Skills specification",
+                "compatibility: ''\n": "compatibility must be",
+                "metadata:\n  version: 1\n": "metadata must map strings",
+            }
+            for field, message in cases.items():
+                entry.write_text(text.replace("---\n", "---\n" + field, 1))
+                self.assertTrue(any(message in e for e in validator.validate(root)), field)
+
+    def test_unlinked_reference_and_long_entrypoint_fail(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            installer.install(ROOT / "skills", root / "skills", ["iphone-duo-layout"])
+            skill = root / "skills/iphone-duo-layout"
+            (skill / "references/orphan.md").write_text("# Orphan\n")
+            with (skill / "SKILL.md").open("a") as stream:
+                stream.write("\n" * validator.MAX_ENTRY_LINES)
+            errors = validator.validate(root)
+            self.assertTrue(any("not linked from SKILL.md: references/orphan.md" in e for e in errors))
+            self.assertTrue(any("longer than" in e for e in errors))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+interface:
+  display_name: "iPhone Duo Development"
+  short_description: "Plan Duo work and route to the focused skills"
+  default_prompt: "Use $iphone-duo-development to audit this app for iPhone Duo, implement the relevant changes, and verify transitions while keeping older iPhones working."

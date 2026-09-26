@@ -58,11 +58,12 @@ def verify(source, project):
                 if file.read_bytes() == copied.read_bytes():
                     continue
                 # The CLI's Eve adapter removes the redundant name field and
-                # reserializes frontmatter. Its description/body must survive.
+                # reserializes frontmatter. Every other field and the body must survive.
                 if relative == Path("SKILL.md") and entry.parent.parent == project / "agent/skills":
                     _, original_yaml, original_body = file.read_text().split("---", 2)
                     _, copied_yaml, copied_body = copied.read_text().split("---", 2)
-                    expected_metadata = {"description": yaml.safe_load(original_yaml)["description"]}
+                    expected_metadata = yaml.safe_load(original_yaml)
+                    expected_metadata.pop("name", None)
                     if yaml.safe_load(copied_yaml) == expected_metadata and original_body.strip() == copied_body.strip():
                         continue
                 raise AssertionError(f"Changed installed resource: {copied.relative_to(project)}")
