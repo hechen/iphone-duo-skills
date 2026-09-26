@@ -1,58 +1,103 @@
 # Agent compatibility
 
-Verified **2026-09-11**. The content uses the [Agent Skills specification](https://agentskills.io/specification): a `SKILL.md` entrypoint with `name` and `description`, plus relative references. One source folder serves every agent.
+Checked **2026-09-25**. The skills use the [Agent Skills specification](https://agentskills.io/specification): a `SKILL.md` entrypoint with `name` and `description` frontmatter, a concise body, and relative `references/`. One source folder serves every agent. Install all eight skill folders together; `iphone-duo-development` routes to the others by name.
 
-## Installation routes
+## Option A: Skills CLI
 
-The [Skills CLI v1.5.25 agent registry](https://github.com/vercel-labs/skills/blob/v1.5.25/src/agents.ts) supplies routing for these examples and many additional agents:
-
-| Agent | CLI target |
-| --- | --- |
-| Claude Code | `claude-code` |
-| Cursor | `cursor` |
-| GitHub Copilot | `github-copilot` |
-| Gemini CLI | `gemini-cli` |
-| Codex | `codex` |
-| OpenCode | `opencode` |
-| Windsurf / Cascade | `windsurf` |
-| Cline | `cline` |
-| Roo Code | `roo` |
-| Continue | `continue` |
-| Antigravity | `antigravity` |
-| OpenClaw | `openclaw` |
-| Goose | `goose` |
-| Qwen Code | `qwen-code` |
-
-Use `--agent` with the desired identifiers. Consult the [complete upstream list](https://github.com/vercel-labs/skills/tree/v1.5.25#supported-agents) for other targets. To install all skills to every CLI target in the current project:
+From your application repository:
 
 ```sh
-npx skills@1.5.25 add hechen/iphone-duo-skills --all
+npx skills@1.5.25 add hechen/iphone-duo-skills --skill '*' --agent claude-code
 ```
 
-This intentionally creates directories for agents you may not use. Selecting specific agents is usually more convenient. Do not mix installation managers for the same destination.
+The [Skills CLI v1.5.25 agent registry](https://github.com/vercel-labs/skills/blob/v1.5.25/src/agents.ts) supplies these targets, among many others:
 
-## Manual directory choices
+| Agent | CLI target | Project directory the CLI uses |
+| --- | --- | --- |
+| Claude Code | `claude-code` | `.claude/skills/` |
+| Codex | `codex` | `.agents/skills/` |
+| Cursor | `cursor` | `.agents/skills/` |
+| GitHub Copilot | `github-copilot` | `.agents/skills/` |
+| Gemini CLI | `gemini-cli` | `.agents/skills/` |
+| OpenClaw | `openclaw` | `skills/` (workspace) |
+| OpenCode | `opencode` | `.agents/skills/` |
+| Windsurf / Cascade | `windsurf` | `.windsurf/skills/` |
+| Cline | `cline` | `.agents/skills/` |
+| Roo Code | `roo` | `.roo/skills/` |
+| Continue | `continue` | `.continue/skills/` |
+| Antigravity | `antigravity` | `.agents/skills/` |
+| Amp | `amp` | `.agents/skills/` |
+| Goose | `goose` | `.goose/skills/` |
+| Qwen Code | `qwen-code` | `.qwen/skills/` |
 
-For `scripts/install.py --dest`, these first-party docs identify supported project directories:
+Several IDs can follow `--agent`. Add `--global` for a user-wide install, `--copy` when symlinks are unsuitable, and `--yes` only for noninteractive runs. `--all` installs to every CLI target and creates directories for agents you may not use. Do not mix installation managers for the same destination.
 
-| Agent documentation | Project directory |
-| --- | --- |
-| [Claude Code](https://code.claude.com/docs/en/skills) | `.claude/skills/` |
-| [Cursor](https://prod.cursor.com/docs/skills) | `.cursor/skills/` |
-| [GitHub Copilot](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) | `.github/skills/` or `.agents/skills/` |
-| [Gemini CLI](https://geminicli.com/docs/cli/using-agent-skills/) | `.gemini/skills/` or `.agents/skills/` |
-| [OpenCode](https://opencode.ai/docs/skills/) | `.opencode/skills/` or `.agents/skills/` |
-| [Windsurf / Cascade](https://docs.windsurf.com/windsurf/cascade/skills) | `.windsurf/skills/` |
+## Option B: GitHub CLI
 
-These are manual choices, not a promise that the CLI always chooses the same alias. It can route several agents through `.agents/skills/`. Copy the entire selected skill folder, including `references/`, into the chosen directory. Then use the agent's documented discovery/reload flow.
+GitHub CLI 2.97.0 includes `gh skill` as a preview:
 
-For an agent without native skills, explicitly provide the entrypoint and allow it to read the linked references. Do not rename `SKILL.md` to a rule or system-instruction file and assume equivalent behavior: loading and invocation semantics differ.
+```sh
+gh skill install hechen/iphone-duo-skills --all --agent claude-code
+gh skill install hechen/iphone-duo-skills --all --agent codex --scope user
+```
+
+Run one command per agent. `--pin <tag-or-commit>` gives a reproducible version, and `--dir` installs into a custom directory. The GitHub CLI adds source-tracking metadata to each installed `SKILL.md` frontmatter so `gh skill update` can find changes. Avoid `--force` over locally edited skills. See the [GitHub CLI manual](https://cli.github.com/manual/gh_skill_install).
+
+## Option C: Python installer or manual copy
+
+`python3 scripts/install.py --dest <directory> [skill ...]` copies whole skill folders, refuses to overwrite anything, and works without Node.js. Copying by hand works too; keep each folder's name and its `references/` and `agents/` contents.
+
+Directories each agent's own documentation lists:
+
+| Agent | Project | User-wide | Source |
+| --- | --- | --- | --- |
+| Claude Code | `.claude/skills/` | `~/.claude/skills/` | [Claude Code skills](https://code.claude.com/docs/en/skills) |
+| Codex | `.agents/skills/` (current folder, its parent, or the repository root) | `~/.agents/skills/` | [Codex skills](https://developers.openai.com/codex/skills) |
+| Cursor | `.agents/skills/` or `.cursor/skills/` | `~/.agents/skills/` or `~/.cursor/skills/` | [Cursor skills](https://cursor.com/docs/skills) |
+| GitHub Copilot | `.github/skills/`, `.claude/skills/`, or `.agents/skills/` | `~/.copilot/skills/` or `~/.agents/skills/` | [About agent skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) |
+| Gemini CLI | `.agents/skills/` or `.gemini/skills/` | `~/.agents/skills/` or `~/.gemini/skills/` | [Gemini CLI skills](https://geminicli.com/docs/cli/skills/) |
+| OpenClaw | `<workspace>/skills/` or `<workspace>/.agents/skills/` | `~/.agents/skills/`, or `skills/` in OpenClaw's state directory | [OpenClaw skills](https://docs.openclaw.ai/tools/skills) |
+| OpenCode | `.opencode/skills/` or `.agents/skills/` | See source | [OpenCode skills](https://opencode.ai/docs/skills/) |
+| Windsurf / Cascade | `.windsurf/skills/` | See source | [Cascade skills](https://docs.windsurf.com/windsurf/cascade/skills) |
+
+`.agents/skills/` is the most widely shared project location. Some agents scan more than one directory; Cursor and Copilot also read `.claude/skills/`. Install one copy per agent's search path so the same skill does not appear twice. For Codex user-wide installs, the Skills CLI v1.5.25 `--global` route writes to `$CODEX_HOME/skills` (default `~/.codex/skills`), while Codex's documentation lists `~/.agents/skills`; if a user-wide install is not discovered, check which directory your Codex version scans.
+
+## Agents that read only AGENTS.md
+
+Some agents have no skill loader but read an `AGENTS.md` file at the repository root. Install the folders to `.agents/skills/` and add a short note to the app's `AGENTS.md`:
+
+```markdown
+## iPhone Duo work
+
+For iPhone Duo (foldable iPhone) layout, toolbar, scene, camera, or testing work, read
+`.agents/skills/iphone-duo-development/SKILL.md` first and follow its routing to the
+matching `.agents/skills/iphone-duo-*/SKILL.md`. Read a skill's `references/` files when
+the skill points to them.
+```
+
+This gives the agent the instructions as ordinary context. It does not create automatic discovery, slash commands, or tool permissions. The same approach works for any agent you can point at a file: give it the entrypoint path and let it read the linked references. Do not rename `SKILL.md` to a rules or system-prompt file and assume the same behavior.
+
+## Activate and verify
+
+1. Reload the agent's skill list or start a new session if the agent requires it.
+2. Confirm `iphone-duo-development` appears in the agent's skill list or picker, where it has one.
+3. Ask the agent to use it on a bounded task, such as listing the app's targets and the Duo work that needs the iOS 27.1 SDK.
+4. Check that it can open a skill's `references/` file. An install that copied only `SKILL.md` files is incomplete.
+
+Explicit invocation differs by agent: Codex uses `$iphone-duo-development`, Claude Code uses `/iphone-duo-development`, and other agents use a picker, an `@` mention, or plain language. The skills do not depend on any of these internally.
+
+## Updating
+
+Use the same installer and scope as the original install. Review upstream changes before replacing local edits. Teams can pin a tag or commit with the GitHub CLI, or vendor a reviewed snapshot into the app repository. The Python installer never overwrites; move the old folders aside first.
+
+## Vendor metadata
+
+`agents/openai.yaml` is optional Codex interface metadata (display name, short description, default prompt). Other agents ignore it, and every skill validates and installs without it. No `claude.yaml`, `cursor.yaml`, or other invented manifest is needed. Keep vendor extensions only when that vendor documents and uses them.
 
 ## What has been verified
 
-- **Packaging:** all seven skills validate without `agents/openai.yaml`. The optional metadata is checked when present.
-- **CLI installation:** `scripts/smoke_agents.py` installs all seven to every project target exposed by the pinned CLI and verifies CLI inventory. On the verification date this produced 55 distinct installation directories and 385 skill copies per run. It repeats this with all OpenAI metadata removed. Files must match exactly except for the CLI's Eve frontmatter conversion, where the test checks the description and instruction body; reference files still match byte for byte.
-- **Host execution:** this does not run Claude, Cursor, Copilot, or every other agent. Their native discovery UI, automatic selection, and task execution have not been end-to-end tested here.
-- **Apple tooling:** reading and reviewing the skills is platform-independent. Building or running iOS apps still needs an appropriate macOS/Xcode environment; a cloud agent without one must report those checks as unperformed.
-
-No `claude.yaml`, `cursor.yaml`, or other invented vendor manifest is needed. Agents consume the shared entrypoint through their own skill loaders. Preserve vendor extensions only when that vendor documents and uses them.
+- **Packaging:** `scripts/validate.py` checks every skill's frontmatter against the specification (name format and match with the folder, description length, optional fields), entrypoint length, links that stay inside the skill folder, reference files that the entrypoint actually links, and that `iphone-duo-development` routes to every other skill. All eight skills also validate with `agents/openai.yaml` removed. `gh skill publish --dry-run` (GitHub CLI 2.97.0) reported no skill errors on 2026-09-25.
+- **Skills CLI installation:** `scripts/smoke_agents.py` installs all eight skills to every project target the pinned CLI exposes, in disposable projects, with and without the optional metadata, and checks the CLI inventory and file contents. On 2026-09-25 each run produced 55 installation directories and 440 verified skill copies. Files must match exactly except for the CLI's Eve frontmatter conversion, which drops the `name` field; there every other field and the body are compared.
+- **GitHub CLI installation:** `gh skill install --from-local . --all --dir <temporary directory>` installed all eight skills with their references (GitHub CLI 2.97.0, 2026-09-25).
+- **Host execution:** these checks do not launch Claude Code, Codex, Cursor, Copilot, or any other agent. Native discovery, automatic selection, and task quality have not been tested end to end.
+- **Apple tooling:** reading the skills needs no Mac. Building or running iOS apps needs macOS and Xcode; an agent without them must report those checks as not performed. `scripts/check-sdk.sh` needs Xcode 27.1 or later.
