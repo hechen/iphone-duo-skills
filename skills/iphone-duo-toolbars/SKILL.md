@@ -18,6 +18,8 @@ Decide which information is necessary to understand an action. Give each item bo
 
 Use the system behavior first, then tune only demonstrated problems. Put Back or Close at the top, then prominent actions such as Done, using the semantic placements. Keep related items in groups instead of spacing them by hand. Do not mark every item high priority: identify the action the user must keep under space pressure, and choose whether the toolbar or the tab bar compresses first.
 
+Treat each sheet as its own bar context. Give it a navigation stack with its Close or Cancel in the cancellation placement and its Done or Save in the confirmation placement, each with a title and a symbol, so its buttons move to the side on the outer display. A text-only `Button("Done")` or a hand-built header row keeps them at the top and leaves the side strip empty. On the inner display a centered sheet keeps its buttons on top by design; do not force a vertical bar there. Read the sheet section of the [toolbar evidence](references/toolbars.md#sheets) before changing a sheet's placement or opting it out.
+
 For a custom control, define a usable compact representation or leave it in a suitable horizontal location. Read the vertical bar edge instead of assuming the right side. Avoid shrinking text or touch targets merely to fit. Opt out of the vertical bar only for a screen better served by horizontal bars, such as a full-screen player or a non-scrolling calculator-style layout, and keep that choice stable instead of toggling it with view state.
 
 ## Verify

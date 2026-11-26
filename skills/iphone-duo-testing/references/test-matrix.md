@@ -28,7 +28,7 @@ This matrix is a repository-authored QA proposal. Select rows relevant to the ap
 
 | Scenario | State to establish | Verify after transition |
 | --- | --- | --- |
-| Closed outer display, both orientations | Main flows | Reachable navigation, independent safe-area insets, readable sheets. |
+| Closed outer display, both orientations | Main flows and every sheet | Reachable navigation, independent safe-area insets, readable sheets; each sheet's Close and Done in the side bar unless deliberately kept horizontal. |
 | Inner display, tall and wide | Selected detail and scrolled collection | Suitable columns, stable selection, no idiom-based layout. |
 | Open and close during editing | Unsaved form with keyboard visible | Draft, focus, selection, scroll, and presentation kept; completion and cancel reachable. |
 | Partial fold, book and tabletop poses | Interactive control near the center | Targets clear of active divisions; media and controls usable; state stable. |

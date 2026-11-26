@@ -46,6 +46,31 @@ struct DuoArrangementProbe: View {
 }
 
 @available(iOS 27.1, *)
+struct DuoSheetProbe: View {
+    @State private var isEditing = true
+
+    var body: some View {
+        Color.clear
+            .sheet(isPresented: $isEditing) {
+                NavigationStack {
+                    List { Text("Item") }
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) { Button(role: .close) { } }
+                            ToolbarItem(placement: .confirmationAction) { Button(role: .confirm) { } }
+                        }
+                }
+                .presentationPlacement(.trailing)
+            }
+    }
+}
+
+@available(iOS 27.1, *)
+@MainActor
+func configureSheetProbe(_ sheet: UISheetPresentationController) {
+    sheet.preferredPlacement = .trailing
+}
+
+@available(iOS 27.1, *)
 struct DuoSplitProbe: View {
     var body: some View {
         ArrangementView {
