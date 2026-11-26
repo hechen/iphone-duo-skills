@@ -27,7 +27,7 @@ Start with Apple's [Preparing your app for iPhone Duo](https://developer.apple.c
 | [`topBarPinnedTrailing`](https://developer.apple.com/documentation/swiftui/toolbaritemplacement/topbarpinnedtrailing) | [`pinnedTrailingGroup`](https://developer.apple.com/documentation/uikit/uinavigationitem/pinnedtrailinggroup) | iOS 27.0 / 16.0 | Probe / Docs |
 | [`visibilityPriority(_:)`](https://developer.apple.com/documentation/swiftui/toolbarcontent/visibilitypriority(_:)) | [`UIBarButtonItem.visibilityPriority`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/visibilitypriority) | iOS 27.0 | Probe / Docs |
 | [`ToolbarOverflowMenu`](https://developer.apple.com/documentation/swiftui/toolbaroverflowmenu) | [`additionalOverflowItems`](https://developer.apple.com/documentation/uikit/uinavigationitem/additionaloverflowitems) | iOS 27.0 / 16.0 | Docs |
-| [`presentationPlacement(_:)`](https://developer.apple.com/documentation/swiftui/view/presentationplacement(_:)) | [`UISheetPresentationController.preferredPlacement`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller/preferredplacement) | iOS 27.0 | Docs |
+| [`presentationPlacement(_:)`](https://developer.apple.com/documentation/swiftui/view/presentationplacement(_:)) | [`UISheetPresentationController.preferredPlacement`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller/preferredplacement) | iOS 27.0 | Probe |
 
 ## Scenes, hinge, and accessories (`iphone-duo-scenes`)
 

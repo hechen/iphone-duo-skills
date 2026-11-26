@@ -20,9 +20,30 @@ Bars supplied by navigation containers move to the vertical axis: SwiftUI `toolb
 
 - Controls sit on the side on the outer display and on the inner display in landscape. The inner display in portrait keeps standard horizontal bars.
 - In a split view showing several columns, the sidebar and content columns keep horizontal bars and the detail column gets the vertical bar. Inspectors keep horizontal bars.
-- Sheets on the outer display get vertical bars by default. On the inner display, centered and leading sheets keep horizontal bars and trailing sheets get vertical ones. Choose the sheet position with [presentationPlacement(_:)](https://developer.apple.com/documentation/swiftui/view/presentationplacement(_:)) or [preferredPlacement](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller/preferredplacement).
+- Sheets follow their own rules; see [Sheets](#sheets).
 - In Split View multitasking on the inner display, each app puts its controls along its own outer edge.
 - To extend a hero or background image under the vertical bar, use [backgroundExtensionEffect()](https://developer.apple.com/documentation/swiftui/view/backgroundextensioneffect()) or [UIBackgroundExtensionView](https://developer.apple.com/documentation/uikit/uibackgroundextensionview).
+
+## Sheets
+
+Checked 2026-11-25 against the preparation article, the [Sheets HIG](https://developer.apple.com/design/human-interface-guidelines/sheets), and the iOS 27.2 SDK:
+
+| Where the sheet appears | Its bar | Source |
+| --- | --- | --- |
+| Outer display | Vertical, on the side | Article ("Sheets"); [Raise the bar](https://developer.apple.com/videos/play/tech-talks/111462/) 3:09 |
+| Inner display, centered (the default) or leading | Horizontal, at the top of the sheet | Article; Raise the bar 3:09 |
+| Inner display, trailing | Vertical | Article; Raise the bar 3:09 |
+| Inner display, partially folded | Not stated. Sheets move off the fold. | [Design for iPhone Duo](https://developer.apple.com/videos/play/tech-talks/111466/) 8:36–9:28 |
+
+- **The buttons decide whether anything moves.** A sheet's bar is vertical only for items that can be: the item needs a symbol. `Button("Done")` with a title and no icon, or a hand-built header row, stays at the top of the sheet even on the outer display.
+- **Use the semantic placements.** Close or Cancel goes in `cancellationAction`, then Done or Save in `confirmationAction` or `topBarPinnedTrailing` (iOS 27.0) for an action that must never overflow. `Button(role: .close)` and `Button(role: .confirm)` (iOS 26.0) supply the standard symbol and label. In UIKit, use the view controller's navigation item inside a navigation controller.
+- **Keep text where it carries meaning.** A price, a count ("Delete 3 items"), or an offer can stay horizontal or move into the content; do not replace it with a bare symbol.
+- **Pair the buttons as the Sheets HIG says.** Pair Done with Cancel or Back, never show Cancel, Done, and Back together, and use Cancel or Close to dismiss without saving.
+- **Placement is a design choice.** `presentationPlacement(_:)` or `preferredPlacement` (iOS 27.0) moves an inner-display sheet to the leading or trailing side. Use trailing for a sheet people use beside the content behind it; do not move every sheet to get a side bar (repository recommendation).
+- **A Close-only sheet may opt out.** Raise the bar (14:21) names a control-heavy sheet with only a close button as a case where the vertical bar costs more space than it saves. Use `toolbarVerticalBehavior(.disabled)` or `preferredVerticalBarBehavior` for that sheet, and keep the choice stable.
+- **Check the short detent.** A medium-detent sheet on the outer display is short; confirm its content and main action are visible, with and without the keyboard.
+
+Apple's sources disagree on the inner display: Design for iPhone Duo (8:36) says sheets use standard horizontal bars in landscape and portrait, while the article and Raise the bar give trailing sheets a vertical bar. Follow the article and check the runtime you test.
 
 ## Order and representation
 
@@ -58,3 +79,21 @@ When the tab bar and toolbar items share the vertical bar, the default compresse
 - **14:21:** Disable vertical bars only where the experience warrants it.
 
 The action inventory and acceptance workflow are repository recommendations.
+
+## Field observations
+
+**Sheet buttons on the outer display (observed 2026-11-25).** Environment: Xcode 27.2 (27B52), iOS 27.2 SDK, iPhone Duo simulator on the iOS 27.2 runtime (24B91016s), closed and upright, a synthetic SwiftUI probe app. Each sheet wrapped a list in a `NavigationStack`:
+
+| Sheet toolbar | Result |
+| --- | --- |
+| `Button("Cancel")` / `Button("Done")` in `cancellationAction` / `confirmationAction` | Stayed at the top of the sheet; the side strip stayed empty. |
+| Hand-built `HStack` header with the same buttons | Stayed at the top; side strip empty. |
+| `Button("Close", systemImage: "xmark")` / `Button("Done", systemImage: "checkmark")` in the same placements | Moved to the side strip, Close above Done. |
+| `Button(role: .close)` / `Button(role: .confirm)` | Moved to the side strip. |
+| Done in `topBarPinnedTrailing` with `.borderedProminent` | Moved to the side strip as a filled button. |
+| Same symbols at a medium detent, and in a full-screen cover | Moved to the side of the sheet or cover. |
+| Same symbols with `toolbarVerticalBehavior(.disabled)` | Horizontal bar; the status bar went horizontal and the full width returned. |
+
+An inline navigation title kept a short horizontal title row above the content after both buttons moved (74 pt top inset with a title, 16 pt without). `toolbarVerticalEdge` read `trailing` inside every sheet whose bar could be vertical, including the text-only one, and `nil` with the opt-out, so it tells you a bar is possible, not that your items are in it.
+
+Not checked: the inner display in any pose, the outer display in landscape, popovers, UIKit, right-to-left layout, larger text, or a device.

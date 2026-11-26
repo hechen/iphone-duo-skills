@@ -40,13 +40,14 @@ Keep these visible instead of silently picking one:
 - **Inactive reserved regions.** The `ReservedRegion` overview says the query returns intersecting regions whether or not they are active; the layout Tech Talk says only active regions are returned by default. The skills filter on `isActive` explicitly.
 - **Arrangements and navigation split views.** The HIG says to put navigation containers around an arrangement; the preparation article says to avoid putting an arrangement inside a navigation split view, list, or scroll view. The skills keep navigation out of arrangements, keep arrangements out of lists and scroll views, and ask for a reachability check when a split view column holds one.
 - **Vertical bar edge.** The HIG says the vertical bar stays on the same hardware side in right-to-left languages; the `toolbarVerticalEdge` page says the edge depends on locale and device. The skills read the value instead of assuming either.
+- **Sheet bars on the inner display.** The preparation article and the bars Tech Talk (3:09) give a trailing sheet a vertical bar; the design Tech Talk (8:36) says sheets use horizontal bars in both inner orientations. The toolbars skill follows the article.
 - **Accessory conditions.** The written article requires the app in the foreground, a running capture session, and the capture interface on the inner display. The scenes Tech Talk also says the app is full screen. The skills follow the article and mention the session detail.
 
 ## SDK verification
 
-[`tests/iPhoneDuoProbe.swift`](tests/iPhoneDuoProbe.swift) covers arrangements, reserved-region queries, hinge callbacks, toolbar axis, edge, compression, and opt-out APIs, camera-capture accessory registration in SwiftUI and UIKit, the window activation action, and the camera direction coordinator. [`scripts/check-sdk.sh`](scripts/check-sdk.sh) type-checks it for `arm64-apple-ios27.1` and `arm64-apple-ios27.1-simulator`.
+[`tests/iPhoneDuoProbe.swift`](tests/iPhoneDuoProbe.swift) covers arrangements, reserved-region queries, hinge callbacks, toolbar axis, edge, compression, and opt-out APIs, sheet placement and the close and confirm button roles, camera-capture accessory registration in SwiftUI and UIKit, the window activation action, and the camera direction coordinator. [`scripts/check-sdk.sh`](scripts/check-sdk.sh) type-checks it for `arm64-apple-ios27.1` and `arm64-apple-ios27.1-simulator`.
 
-On 2026-09-25, Xcode 27.1 (27A9269) with the iOS 27.1 SDK (24A94403) passed both targets. Xcode 27.0 (27A266a) with the iOS 27.0 SDK failed, as expected, because it lacks the Duo declarations. The probe establishes spelling and availability only. The skills' API map marks which symbols it covers.
+On 2026-09-25, Xcode 27.1 (27A9269) with the iOS 27.1 SDK (24A94403) passed both targets. Xcode 27.0 (27A266a) with the iOS 27.0 SDK failed, as expected, because it lacks the Duo declarations. On 2026-11-25, after the sheet symbols were added, Xcode 27.2 (27B52) with the iOS 27.2 SDK (24B8118) passed both targets. The probe establishes spelling and availability only. The skills' API map marks which symbols it covers.
 
 ## Supplementary sessions
 
